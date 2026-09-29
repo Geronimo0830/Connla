@@ -1,0 +1,43 @@
+syntax = "proto3";
+package memos.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+option go_package = "gen/api/v1";
+
+service KnowledgeSearchService {
+  rpc SearchKnowledge(SearchKnowledgeRequest) returns (SearchKnowledgeResponse) {
+    option (google.api.http) = {get: "/api/v1/knowledge/search"};
+  }
+  rpc RebuildKnowledgeSearch(RebuildKnowledgeSearchRequest) returns (RebuildKnowledgeSearchResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/search:rebuild"
+      body: "*"
+    };
+  }
+}
+message SearchKnowledgeRequest {
+  string query = 1 [(google.api.field_behavior) = REQUIRED];
+  string topic = 2;
+  int32 page_size = 3;
+  string content_type = 4;
+  string file_format = 5;
+  int64 created_from = 6;
+  int64 created_before = 7;
+}
+message KnowledgeSearchResult {
+  string document = 1;
+  string title = 2;
+  string original_filename = 3;
+  string snippet = 4;
+  string card = 5;
+}
+message SearchKnowledgeResponse {
+  repeated KnowledgeSearchResult results = 1;
+}
+message RebuildKnowledgeSearchRequest {}
+message RebuildKnowledgeSearchResponse {
+  int32 indexed_documents = 1;
+  int32 indexed_cards = 2;
+}

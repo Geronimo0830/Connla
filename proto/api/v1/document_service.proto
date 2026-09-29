@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package memos.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gen/api/v1";
+
+service DocumentService {
+  rpc CreateDocument(CreateDocumentRequest) returns (Document) {
+    option (google.api.http) = {
+      post: "/api/v1/documents"
+      body: "*"
+    };
+  }
+  rpc ListDocuments(ListDocumentsRequest) returns (ListDocumentsResponse) {
+    option (google.api.http) = {get: "/api/v1/documents"};
+  }
+  rpc GetDocument(GetDocumentRequest) returns (Document) {
+    option (google.api.http) = {get: "/api/v1/{name=documents/*}"};
+  }
+  rpc GetDocumentContent(GetDocumentContentRequest) returns (DocumentContent) {
+    option (google.api.http) = {get: "/api/v1/{name=documents/*}/content"};
+  }
+  rpc RetryDocument(RetryDocumentRequest) returns (Document) {
+    option (google.api.http) = {post: "/api/v1/{name=documents/*}:retry"};
+  }
+  rpc GetDocumentDeletePlan(GetDocumentDeletePlanRequest) returns (DocumentDeletePlan) {
+    option (google.api.http) = {get: "/api/v1/{name=documents/*}:deletePlan"};
+  }
+  rpc DeleteDocument(DeleteDocumentRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/api/v1/{name=documents/*}"};
+  }
+}
+
+enum DocumentStatus {
+  DOCUMENT_STATUS_UNSPECIFIED = 0;
+  DOCUMENT_STATUS_UPLOADED = 1;
+  DOCUMENT_STATUS_QUEUED = 2;
+  DOCUMENT_STATUS_PARSING = 3;
+  DOCUMENT_STATUS_READY = 4;
+  DOCUMENT_STATUS_FAILED = 5;
+  DOCUMENT_STATUS_UNSUPPORTED = 6;
+}
+
+message Document {
+  option (google.api.resource) = {
+    type: "memos.api.v1/Document"
+    pattern: "documents/{document}"
+  };
+
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  string source_attachment = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp update_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string title = 5;
+  string original_filename = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string extension = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string media_type = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int64 size = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string sha256 = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  DocumentStatus status = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string parser_version = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string error_code = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string error_message = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp parsed_time = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CreateDocumentRequest {
+  string attachment = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "memos.api.v1/Attachment"}
+  ];
+  string title = 2;
+}
+
+message ListDocumentsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListDocumentsResponse {
+  repeated Document documents = 1;
+  string next_page_token = 2;
+}
+
+message GetDocumentRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "memos.api.v1/Document"}
+  ];
+}
+
+message GetDocumentContentRequest {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DocumentContent {
+  string document = 1;
+  string plain_text = 2;
+  string structured_json = 3;
+  string content_hash = 4;
+}
+
+message RetryDocumentRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "memos.api.v1/Document"}
+  ];
+}
+
+message GetDocumentDeletePlanRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "memos.api.v1/Document"}
+  ];
+}
+
+message DocumentDeletePlan {
+  string name = 1;
+  string source_attachment = 2;
+  bool source_attachment_retained = 3;
+  int32 derived_content_rows = 4;
+  int32 parse_attempt_rows = 5;
+  int32 linked_card_count = 6;
+}
+
+message DeleteDocumentRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "memos.api.v1/Document"}
+  ];
+  bool confirm = 2 [(google.api.field_behavior) = REQUIRED];
+}

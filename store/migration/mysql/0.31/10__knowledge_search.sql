@@ -1,0 +1,1 @@
+-- SQLite FTS5 search is intentionally unavailable on MySQL in V1.

@@ -1,0 +1,14 @@
+{
+  "name": "Connla",
+  "short_name": "Connla",
+  "description": "私密、优先在本地运行的个人知识库。",
+  "icons": [
+    { "src": "/android-chrome-192x192.png?v=connla-1", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png?v=connla-1", "sizes": "512x512", "type": "image/png" }
+  ],
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "theme_color": "#faf9f5",
+  "background_color": "#faf9f5"
+}

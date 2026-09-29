@@ -1,0 +1,159 @@
+import { createBrowserRouter, Navigate, type RouteObject } from "react-router-dom";
+import App from "@/App";
+import { ChunkLoadErrorFallback } from "@/components/ErrorBoundary";
+import MainLayout from "@/layouts/MainLayout";
+import RootLayout from "@/layouts/RootLayout";
+import { lazyWithReload } from "@/utils/lazy";
+import {
+  LandingRoute,
+  RequireAuthRoute,
+  RequireFullInitializationRoute,
+  RequireGuestRoute,
+  RequireInstanceInitializationRoute,
+} from "./guards";
+import { CALENDAR_ROUTE_PATTERN, ROUTES, SPACE_ROUTE_PATTERN } from "./routes";
+import { SpaceRoute } from "./SpaceRoute";
+
+const AdminSignIn = lazyWithReload(() => import("@/pages/AdminSignIn"));
+const About = lazyWithReload(() => import("@/pages/About"));
+const Archived = lazyWithReload(() => import("@/pages/Archived"));
+const AuthCallback = lazyWithReload(() => import("@/pages/AuthCallback"));
+const MemoMap = lazyWithReload(() => import("@/pages/Map"));
+const Calendar = lazyWithReload(() => import("@/pages/Calendar"));
+const Explore = lazyWithReload(() => import("@/pages/Explore"));
+const Home = lazyWithReload(() => import("@/pages/Home"));
+const Inboxes = lazyWithReload(() => import("@/pages/Inboxes"));
+const Knowledge = lazyWithReload(() => import("@/pages/Knowledge"));
+const MemoDetail = lazyWithReload(() => import("@/pages/MemoDetail"));
+const NotFound = lazyWithReload(() => import("@/pages/NotFound"));
+const PermissionDenied = lazyWithReload(() => import("@/pages/PermissionDenied"));
+const Attachments = lazyWithReload(() => import("@/pages/Attachments"));
+const Setting = lazyWithReload(() => import("@/pages/Setting"));
+const MemoViews = lazyWithReload(() => import("@/pages/MemoViews"));
+const SignIn = lazyWithReload(() => import("@/pages/SignIn"));
+const SignUp = lazyWithReload(() => import("@/pages/SignUp"));
+const UserProfile = lazyWithReload(() => import("@/pages/UserProfile"));
+
+// Backward compatibility alias.
+export const Routes = ROUTES;
+export { ROUTES };
+
+/**
+ * Static route configuration. Exported so tests can assert on the tree shape
+ * (e.g. that `/auth/callback` stays outside the guest-only guard subtree) and
+ * so integration tests can drive a `createMemoryRouter` over the same tree.
+ */
+export const routeConfig: RouteObject[] = [
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ChunkLoadErrorFallback />,
+    children: [
+      {
+        path: Routes.AUTH,
+        children: [
+          // The OAuth callback must run regardless of the current session — an
+          // authenticated tab elsewhere must not block it from consuming its
+          // one-time OAuth state. Keep it outside the guest-only subtree.
+          { path: "callback", element: <AuthCallback /> },
+          {
+            element: <RequireInstanceInitializationRoute />,
+            children: [
+              {
+                element: <RequireGuestRoute />,
+                children: [
+                  { path: "", element: <SignIn /> },
+                  { path: "admin", element: <AdminSignIn /> },
+                  { path: "signup", element: <SignUp /> },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      // Backward compatibility: the old `/home` URL now lives at `/`.
+      { path: "home", element: <Navigate to={Routes.HOME} replace /> },
+      {
+        element: <RootLayout />,
+        children: [
+          {
+            element: <MainLayout />,
+            children: [
+              {
+                element: <LandingRoute />,
+                children: [{ index: true, element: <Home /> }],
+              },
+              {
+                element: <RequireInstanceInitializationRoute />,
+                children: [{ path: Routes.ABOUT, element: <About /> }],
+              },
+              { path: Routes.EXPLORE, element: <Explore /> },
+              { path: Routes.USER_PROFILE, element: <UserProfile /> },
+              {
+                element: <RequireAuthRoute />,
+                children: [
+                  { path: Routes.ARCHIVED, element: <Archived /> },
+                  { path: CALENDAR_ROUTE_PATTERN, element: <Calendar /> },
+                  {
+                    element: <RequireFullInitializationRoute />,
+                    children: [{ path: Routes.VIEWS, element: <MemoViews /> }],
+                  },
+                ],
+              },
+            ],
+          },
+          { path: "memos/:uid", element: <MemoDetail /> },
+          { path: "memos/shares/:token", element: <MemoDetail /> },
+          {
+            element: <RequireAuthRoute />,
+            children: [
+              {
+                element: <RequireFullInitializationRoute />,
+                children: [
+                  {
+                    path: SPACE_ROUTE_PATTERN,
+                    children: [
+                      {
+                        element: <SpaceRoute />,
+                        children: [
+                          {
+                            element: <MainLayout />,
+                            children: [
+                              { index: true, element: <Home /> },
+                              { path: "explore", element: <Explore /> },
+                              { path: "calendar/:year?/:month?/:day?", element: <Calendar /> },
+                            ],
+                          },
+                          { path: "attachments", element: <Attachments /> },
+                          { path: "map", element: <MemoMap /> },
+                        ],
+                      },
+                      { path: "*", element: <NotFound /> },
+                    ],
+                  },
+                  { path: Routes.ATTACHMENTS, element: <Attachments /> },
+                  { path: Routes.MAP, element: <MemoMap /> },
+                  { path: Routes.INBOX, element: <Inboxes /> },
+                  { path: Routes.KNOWLEDGE, element: <Knowledge /> },
+                  { path: Routes.KNOWLEDGE_DOCUMENTS, element: <Knowledge moduleId="documents" /> },
+                  { path: Routes.KNOWLEDGE_CARDS, element: <Knowledge moduleId="cards" /> },
+                  { path: Routes.KNOWLEDGE_TOPICS, element: <Knowledge moduleId="topics" /> },
+                  { path: Routes.KNOWLEDGE_SEARCH, element: <Knowledge moduleId="search" /> },
+                  { path: Routes.KNOWLEDGE_REVIEW, element: <Knowledge moduleId="review" /> },
+                  { path: Routes.SETTING, element: <Setting /> },
+                ],
+              },
+            ],
+          },
+          { path: "403", element: <PermissionDenied /> },
+          { path: "404", element: <NotFound /> },
+          { path: "*", element: <NotFound /> },
+        ],
+      },
+    ],
+  },
+];
+
+const router = createBrowserRouter(routeConfig);
+
+export default router;

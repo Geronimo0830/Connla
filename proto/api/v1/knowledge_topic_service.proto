@@ -1,0 +1,74 @@
+syntax = "proto3";
+package memos.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gen/api/v1";
+
+service KnowledgeTopicService {
+  rpc CreateKnowledgeTopic(CreateKnowledgeTopicRequest) returns (KnowledgeTopic) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/topics"
+      body: "*"
+    };
+  }
+  rpc ListKnowledgeTopics(ListKnowledgeTopicsRequest) returns (ListKnowledgeTopicsResponse) {
+    option (google.api.http) = {get: "/api/v1/knowledge/topics"};
+  }
+  rpc UpdateKnowledgeTopic(UpdateKnowledgeTopicRequest) returns (KnowledgeTopic) {
+    option (google.api.http) = {
+      patch: "/api/v1/{topic.name=knowledge/topics/*}"
+      body: "topic"
+    };
+  }
+  rpc DeleteKnowledgeTopic(DeleteKnowledgeTopicRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/api/v1/{name=knowledge/topics/*}"};
+  }
+  rpc SetDocumentTopics(SetDocumentTopicsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/api/v1/{document=documents/*}/topics"
+      body: "*"
+    };
+  }
+  rpc ListDocumentTopics(ListDocumentTopicsRequest) returns (ListKnowledgeTopicsResponse) {
+    option (google.api.http) = {get: "/api/v1/{document=documents/*}/topics"};
+  }
+}
+message KnowledgeTopic {
+  option (google.api.resource) = {
+    type: "memos.api.v1/KnowledgeTopic"
+    pattern: "knowledge/topics/{topic}"
+  };
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  string display_name = 2 [(google.api.field_behavior) = REQUIRED];
+  string description = 3;
+  string parent = 4 [(google.api.resource_reference) = {type: "memos.api.v1/KnowledgeTopic"}];
+  google.protobuf.Timestamp create_time = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp update_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+message CreateKnowledgeTopicRequest {
+  KnowledgeTopic topic = 1 [(google.api.field_behavior) = REQUIRED];
+}
+message ListKnowledgeTopicsRequest {}
+message ListKnowledgeTopicsResponse {
+  repeated KnowledgeTopic topics = 1;
+}
+message UpdateKnowledgeTopicRequest {
+  KnowledgeTopic topic = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.FieldMask update_mask = 2;
+}
+message DeleteKnowledgeTopicRequest {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+message SetDocumentTopicsRequest {
+  string document = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string topics = 2;
+}
+message ListDocumentTopicsRequest {
+  string document = 1 [(google.api.field_behavior) = REQUIRED];
+}

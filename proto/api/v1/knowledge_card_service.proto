@@ -1,0 +1,64 @@
+syntax = "proto3";
+package memos.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gen/api/v1";
+
+service KnowledgeCardService {
+  rpc CreateKnowledgeCard(CreateKnowledgeCardRequest) returns (KnowledgeCard) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/cards"
+      body: "*"
+    };
+  }
+  rpc ListKnowledgeCards(ListKnowledgeCardsRequest) returns (ListKnowledgeCardsResponse) {
+    option (google.api.http) = {get: "/api/v1/knowledge/cards"};
+  }
+  rpc UpdateKnowledgeCard(UpdateKnowledgeCardRequest) returns (KnowledgeCard) {
+    option (google.api.http) = {
+      patch: "/api/v1/{card.name=knowledge/cards/*}"
+      body: "card"
+    };
+  }
+}
+
+message KnowledgeCard {
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  string title = 2 [(google.api.field_behavior) = REQUIRED];
+  string body = 3 [(google.api.field_behavior) = REQUIRED];
+  string card_type = 4;
+  repeated string topics = 5;
+  bool archived = 6;
+  string source_document = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string source_title = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string source_quote = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string source_locator = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string source_content_hash = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp create_time = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp update_time = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
+  bool source_available = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CardSourceSelection {
+  string document = 1;
+  string content_hash = 2;
+  int32 start_offset = 3;
+  int32 end_offset = 4;
+}
+
+message CreateKnowledgeCardRequest {
+  KnowledgeCard card = 1 [(google.api.field_behavior) = REQUIRED];
+  CardSourceSelection source = 2;
+}
+message ListKnowledgeCardsRequest {
+  bool include_archived = 1;
+}
+message ListKnowledgeCardsResponse {
+  repeated KnowledgeCard cards = 1;
+}
+message UpdateKnowledgeCardRequest {
+  KnowledgeCard card = 1 [(google.api.field_behavior) = REQUIRED];
+}
