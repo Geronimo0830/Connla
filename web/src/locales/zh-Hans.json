@@ -4,7 +4,6 @@
     "overview": "总览",
     "modules-label": "知识库模块",
     "back": "返回知识库",
-    "not-implemented": "复习功能尚未开放",
     "documents": {
       "upload-title": "添加文档",
       "choose-files": "选择文件",
@@ -65,10 +64,6 @@
       "search": {
         "title": "知识搜索",
         "description": "按照内容、来源、主题、格式或日期查找文档和卡片。"
-      },
-      "review": {
-        "title": "知识复习",
-        "description": "复习到期卡片，并记录哪些内容正在成为长期知识。"
       }
     }
   },

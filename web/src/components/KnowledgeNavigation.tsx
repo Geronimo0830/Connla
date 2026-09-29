@@ -1,4 +1,4 @@
-import { BookOpenIcon, FileTextIcon, LightbulbIcon, type LucideIcon, RefreshCwIcon, SearchIcon, TagsIcon } from "lucide-react";
+import { BookOpenIcon, FileTextIcon, LightbulbIcon, type LucideIcon, SearchIcon, TagsIcon } from "lucide-react";
 import { Link, matchPath, useLocation } from "react-router-dom";
 import { useAppSidebar } from "@/contexts/AppSidebarContext";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,7 @@ import { useTranslate } from "@/utils/i18n";
 import { SIDEBAR_ROW_CLASSES, SidebarRowIconSlot, sidebarRowStateClasses } from "./AppSidebar/SidebarRow";
 import SidebarSection from "./AppSidebar/SidebarSection";
 
-export type KnowledgeModuleId = "documents" | "cards" | "topics" | "search" | "review";
+export type KnowledgeModuleId = "documents" | "cards" | "topics" | "search";
 
 export interface KnowledgeModuleDefinition {
   id: KnowledgeModuleId;
@@ -46,13 +46,6 @@ export const KNOWLEDGE_MODULES: KnowledgeModuleDefinition[] = [
     icon: SearchIcon,
     labelKey: "knowledge.modules.search.title",
     descriptionKey: "knowledge.modules.search.description",
-  },
-  {
-    id: "review",
-    path: ROUTES.KNOWLEDGE_REVIEW,
-    icon: RefreshCwIcon,
-    labelKey: "knowledge.modules.review.title",
-    descriptionKey: "knowledge.modules.review.description",
   },
 ];
 

@@ -11,7 +11,6 @@ export const ROUTES = {
   KNOWLEDGE_CARDS: "/knowledge/cards",
   KNOWLEDGE_TOPICS: "/knowledge/topics",
   KNOWLEDGE_SEARCH: "/knowledge/search",
-  KNOWLEDGE_REVIEW: "/knowledge/review",
   ARCHIVED: "/archived",
   CALENDAR: "/calendar",
   MAP: "/map",

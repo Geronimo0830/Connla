@@ -139,7 +139,6 @@ export const routeConfig: RouteObject[] = [
                   { path: Routes.KNOWLEDGE_CARDS, element: <Knowledge moduleId="cards" /> },
                   { path: Routes.KNOWLEDGE_TOPICS, element: <Knowledge moduleId="topics" /> },
                   { path: Routes.KNOWLEDGE_SEARCH, element: <Knowledge moduleId="search" /> },
-                  { path: Routes.KNOWLEDGE_REVIEW, element: <Knowledge moduleId="review" /> },
                   { path: Routes.SETTING, element: <Setting /> },
                 ],
               },

@@ -31,6 +31,14 @@ The original `LICENSE` file is preserved at the repository root.
 - Security posture: worker is bundled locally with no CDN dependency; source URLs remain same-origin and PDF JavaScript is not executed
 - Why needed: browser-native PDF viewers do not provide a consistent, controllable reader across supported browsers
 
+### Microsoft.Web.WebView2
+
+- Project: <https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4191.47>
+- Version: `1.0.4191.47`
+- License: BSD-3-Clause; the complete license is included as `WEBVIEW2_LICENSE.txt` in the Windows desktop package
+- Use: render Connla in a dedicated Windows desktop window without opening the user's browser
+- Runtime: requires the Microsoft Edge WebView2 Runtime on the user's machine; it is not bundled with Connla
+
 The repository also contains dependencies declared by upstream package manifests. Their licenses must be reviewed through the normal dependency and release process; this summary does not replace their license texts.
 
 ## Evaluated But Not Yet Incorporated

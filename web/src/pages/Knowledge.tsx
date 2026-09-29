@@ -89,12 +89,8 @@ const KnowledgeModule = ({ moduleId }: { moduleId: KnowledgeModuleId }) => {
         <KnowledgeCards />
       ) : moduleId === "topics" ? (
         <TopicManager />
-      ) : moduleId === "search" ? (
-        <KnowledgeSearch />
       ) : (
-        <div className="mt-8 rounded-lg border border-dashed border-border bg-muted/20 p-5 sm:p-6">
-          <p className="text-sm font-medium text-foreground">{t("knowledge.not-implemented")}</p>
-        </div>
+        <KnowledgeSearch />
       )}
     </section>
   );

@@ -1,5 +1,7 @@
 # Generated output
 /build/
+/desktop/bin/
+/desktop/obj/
 /bin/
 /tmp/
 /memos

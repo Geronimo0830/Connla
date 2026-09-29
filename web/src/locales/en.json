@@ -4,7 +4,6 @@
     "overview": "Overview",
     "modules-label": "Knowledge modules",
     "back": "Back to Knowledge",
-    "not-implemented": "Review is not available yet",
     "documents": {
       "upload-title": "Add documents",
       "choose-files": "Choose files",
@@ -65,10 +64,6 @@
       "search": {
         "title": "Search",
         "description": "Retrieve documents and cards by content, source, topic, format, or date."
-      },
-      "review": {
-        "title": "Review",
-        "description": "Revisit due cards and keep a history of what is becoming durable knowledge."
       }
     }
   },

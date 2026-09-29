@@ -70,7 +70,7 @@ describe("Knowledge page", () => {
   beforeEach(async () => {
     await i18n.changeLanguage("en");
   });
-  it("exposes all five modules as deep links", () => {
+  it("exposes only the four available modules as deep links", () => {
     render(
       <MemoryRouter>
         <Knowledge />
@@ -78,12 +78,12 @@ describe("Knowledge page", () => {
     );
 
     const navigation = screen.getByRole("navigation", { name: "Knowledge modules" });
-    expect(within(navigation).getAllByRole("link")).toHaveLength(5);
+    expect(within(navigation).getAllByRole("link")).toHaveLength(4);
     expect(within(navigation).getByRole("link", { name: /Document Inbox/ })).toHaveAttribute("href", "/knowledge/documents");
     expect(within(navigation).getByRole("link", { name: /Cards/ })).toHaveAttribute("href", "/knowledge/cards");
     expect(within(navigation).getByRole("link", { name: /Topics/ })).toHaveAttribute("href", "/knowledge/topics");
     expect(within(navigation).getByRole("link", { name: /Search/ })).toHaveAttribute("href", "/knowledge/search");
-    expect(within(navigation).getByRole("link", { name: /Review/ })).toHaveAttribute("href", "/knowledge/review");
+    expect(within(navigation).queryByRole("link", { name: /Review/ })).not.toBeInTheDocument();
     expect(within(navigation).getByText("Bring Word, Excel, PDF, Markdown, and text files into one processing queue.")).toBeInTheDocument();
     expect(screen.queryByText("Learn while you build")).not.toBeInTheDocument();
   });
@@ -107,17 +107,6 @@ describe("Knowledge page", () => {
     expect(screen.getByRole("link", { name: "Back to Knowledge" })).toHaveAttribute("href", "/knowledge");
     expect(screen.queryByText("Bring Word, Excel, PDF, Markdown, and text files into one processing queue.")).not.toBeInTheDocument();
     expect(screen.queryByText(/TXT and Markdown are readable now/)).not.toBeInTheDocument();
-  });
-
-  it("shows only a concise unavailable state for review", () => {
-    render(
-      <MemoryRouter>
-        <Knowledge moduleId="review" />
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByText("Review is not available yet")).toBeInTheDocument();
-    expect(screen.queryByText(/Next: add a simple due queue/)).not.toBeInTheDocument();
   });
 
   it("filters on a narrow-flow control without hiding the recovery action", () => {

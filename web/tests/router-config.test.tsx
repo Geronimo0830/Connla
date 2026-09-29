@@ -61,6 +61,7 @@ describe("router configuration", () => {
   it("sends unknown Knowledge subroutes to the normal not-found page", () => {
     const matches = matchRoutes(routeConfig, "/knowledge/unknown");
     expect(matches?.at(-1)?.route.path).toBe("*");
+    expect(findByPath(routeConfig, "/knowledge/review")).toBeUndefined();
   });
 
   it("keeps /auth/callback outside the guest-only guard", () => {
@@ -88,7 +89,6 @@ describe("router configuration", () => {
       ROUTES.KNOWLEDGE_CARDS,
       ROUTES.KNOWLEDGE_TOPICS,
       ROUTES.KNOWLEDGE_SEARCH,
-      ROUTES.KNOWLEDGE_REVIEW,
       ROUTES.SETTING,
     ]) {
       expect(hasAncestorOfType(routeConfig, path, RequireAuthRoute)).toBe(true);
@@ -105,7 +105,6 @@ describe("router configuration", () => {
       ROUTES.KNOWLEDGE_CARDS,
       ROUTES.KNOWLEDGE_TOPICS,
       ROUTES.KNOWLEDGE_SEARCH,
-      ROUTES.KNOWLEDGE_REVIEW,
       ROUTES.SETTING,
     ]) {
       expect(hasAncestorOfType(routeConfig, path, RequireFullInitializationRoute)).toBe(true);

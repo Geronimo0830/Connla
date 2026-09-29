@@ -50,9 +50,11 @@ Connla 取自爱尔兰传说中的 *Connla's Well*。在《Sinann II》中，九
 
 当前边界也很明确：旧版 `.doc` / `.xls` 可保存原件，但不解析正文；扫描版 PDF 暂无 OCR。AI 自动生成和复习功能不在当前版本范围内。
 
-## 从源码运行
+## 下载与运行
 
-Windows 用户可以从 [Releases](https://github.com/Geronimo0830/Connla/releases) 下载压缩包，完整解压后双击 `start.cmd`。这不是安装程序；请保留压缩包内的全部文件。个人数据与程序文件夹分开保存，升级前请先备份。
+Windows 用户可以从 [Releases](https://github.com/Geronimo0830/Connla/releases) 下载桌面版压缩包，完整解压后双击 `Connla.exe`。软件会在独立窗口中打开，不需要安装开发工具或打开浏览器；若缺少 WebView2 Runtime，请按提示从微软官网安装。个人数据与程序分开保存，升级前请先备份。详见 [桌面版使用说明](docs/LOCAL_DESKTOP.md)。
+
+### 从源码运行
 
 本仓库不包含个人数据或备份。从源码运行需要 Go 1.27、Node.js 24 和 pnpm 11。仓库保留了 Memos 原有的 Go module 路径及部分内部命名，以兼容现有代码和生成文件；产品名称为 Connla。
 
@@ -64,7 +66,7 @@ cd ..
 go run ./cmd/memos --addr 127.0.0.1 --port 8081
 ```
 
-在浏览器访问 `http://127.0.0.1:8081/`。第一次使用时创建管理员账号。Windows 本地版的构建、启动和数据位置见 [使用说明](docs/LOCAL_WINDOWS.md)；备份和恢复见 [备份说明](docs/BACKUP_RESTORE.md)。请妥善保管密码，定期把备份复制到另一块磁盘，不要把个人数据目录提交到公开仓库。
+在浏览器访问 `http://127.0.0.1:8081/`。第一次使用时创建管理员账号。旧版脚本的构建、启动和数据位置见 [使用说明](docs/LOCAL_WINDOWS.md)；备份和恢复见 [备份说明](docs/BACKUP_RESTORE.md)。请妥善保管密码，定期把备份复制到另一块磁盘，不要把个人数据目录提交到公开仓库。
 
 ## 开发检查
 
