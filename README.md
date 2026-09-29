@@ -8,6 +8,16 @@
 
 它以本地使用为主。随手记录、文档收件箱、全文搜索、主题和知识卡片彼此衔接，却不要求你一开始就分类、套模板或接入 AI。先用起来，结构可以随着理解慢慢长出来。
 
+## 真实界面
+
+从知识库总览进入文档收件箱，再把原文依据和自己的理解整理成知识卡片。以下均为实际运行画面，左下角的账号已遮盖。
+
+![Connla 知识库总览](docs/screenshots/knowledge-overview.png)
+
+![Connla 文档收件箱](docs/screenshots/document-inbox.png)
+
+![Connla 知识卡片编辑](docs/screenshots/knowledge-card.png)
+
 ## 名字的由来
 
 > *Tipra Chonnlai, ba mór muirn,*<br>
@@ -42,7 +52,9 @@ Connla 取自爱尔兰传说中的 *Connla's Well*。在《Sinann II》中，九
 
 ## 从源码运行
 
-本仓库只发布源码，不包含个人数据、备份或预编译的 Windows 程序。开发环境需要 Go 1.27、Node.js 24 和 pnpm 11。仓库保留了 Memos 原有的 Go module 路径及部分内部命名，以兼容现有代码和生成文件；产品名称为 Connla。
+Windows 用户可以从 [Releases](https://github.com/Geronimo0830/Connla/releases) 下载压缩包，完整解压后双击 `start.cmd`。这不是安装程序；请保留压缩包内的全部文件。个人数据与程序文件夹分开保存，升级前请先备份。
+
+本仓库不包含个人数据或备份。从源码运行需要 Go 1.27、Node.js 24 和 pnpm 11。仓库保留了 Memos 原有的 Go module 路径及部分内部命名，以兼容现有代码和生成文件；产品名称为 Connla。
 
 ```powershell
 cd web
