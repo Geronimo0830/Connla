@@ -442,6 +442,18 @@
     "back-to-top": "回到顶部"
   },
   "setting": {
+    "local-backup": {
+      "label": "备份与恢复",
+      "backup-title": "备份整个知识库",
+      "backup-description": "选择保存位置；Connla 会短暂停止本地服务并验证备份。",
+      "backup-action": "创建备份",
+      "backing-up": "正在备份…",
+      "restore-title": "从备份恢复",
+      "restore-description": "选择备份文件夹；恢复前会保留当前数据的副本，并请你确认。",
+      "restore-action": "选择备份",
+      "restoring": "正在恢复…",
+      "failed": "操作失败，请重试。"
+    },
     "member": {
       "active": "启用中",
       "admin": "管理员",

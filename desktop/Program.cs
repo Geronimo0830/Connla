@@ -19,7 +19,8 @@ internal static class Program
         try
         {
             var options = DesktopOptions.Parse(args);
-            using var mutex = new Mutex(true, $"Local\\ConnlaDesktop-{options.Port}", out var firstInstance);
+            var dataKey = Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(options.DataDirectory.ToUpperInvariant())))[..16];
+            using var mutex = new Mutex(true, $"Local\\ConnlaDesktop-{dataKey}", out var firstInstance);
             if (!firstInstance)
             {
                 MessageBox.Show("Connla 桌面版已在运行。", "Connla", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -68,13 +69,15 @@ internal sealed record DesktopOptions(string DataDirectory, int Port, bool Smoke
     }
 }
 
-internal sealed class MainWindow : Form
+internal sealed partial class MainWindow : Form
 {
     private readonly DesktopOptions _options;
     private readonly Label _status;
     private readonly WebView2 _webView;
     private readonly CancellationTokenSource _closing = new();
     private Process? _server;
+    private string? _serverPath;
+    private bool _maintenanceBusy;
     private Uri? _localOrigin;
 
     public MainWindow(DesktopOptions options)
@@ -100,8 +103,14 @@ internal sealed class MainWindow : Form
         Controls.Add(_webView);
         Controls.Add(_status);
         Shown += async (_, _) => await StartAsync();
-        FormClosing += (_, _) =>
+        FormClosing += (_, e) =>
         {
+            if (_maintenanceBusy)
+            {
+                e.Cancel = true;
+                MessageBox.Show("正在备份或恢复，请等待操作完成后再关闭窗口。", "Connla", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             _closing.Cancel();
             StopOwnedServer();
         };
@@ -113,29 +122,20 @@ internal sealed class MainWindow : Form
         {
             if (!CanBindLoopback(_options.Port))
                 throw new InvalidOperationException($"本机端口 {_options.Port} 已被占用。请先关闭旧版 Connla，再打开桌面版；不会自动结束其他程序。");
+            var restoreSwap = new RestoreSwap(_options.DataDirectory);
+            restoreSwap.RecoverIfNeeded();
 
             CoreWebView2Environment.GetAvailableBrowserVersionString();
-            var serverPath = ExtractServer();
+            _serverPath = ExtractServer();
             Directory.CreateDirectory(_options.DataDirectory);
-            _server = StartServer(serverPath, _options);
-            _server.EnableRaisingEvents = true;
-            _server.Exited += (_, _) =>
-            {
-                if (_closing.IsCancellationRequested || IsDisposed || !IsHandleCreated) return;
-                BeginInvoke(() =>
-                {
-                    if (_closing.IsCancellationRequested || IsDisposed) return;
-                    MessageBox.Show("Connla 本地服务已退出。请查看数据目录中的 server.err.log。", "Connla", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Environment.ExitCode = 1;
-                    Close();
-                });
-            };
-            await WaitForServerAsync(_server, _options.Port, _closing.Token);
+            await StartOwnedServerAsync();
+            restoreSwap.Complete();
 
             _localOrigin = new Uri($"http://127.0.0.1:{_options.Port}/");
             var profileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Connla", "WebView2");
             var environment = await CoreWebView2Environment.CreateAsync(userDataFolder: profileDirectory);
             await _webView.EnsureCoreWebView2Async(environment);
+            _webView.CoreWebView2.WebMessageReceived += OnWebMessageReceived;
             _webView.CoreWebView2.NavigationStarting += (_, e) =>
             {
                 if (!IsLocalUri(e.Uri))
@@ -285,18 +285,7 @@ internal sealed class MainWindow : Form
 
     private void StopOwnedServer()
     {
-        var server = _server;
-        _server = null;
-        if (server is null) return;
-        try
-        {
-            if (!server.HasExited)
-            {
-                server.Kill(entireProcessTree: true);
-                server.WaitForExit(5000);
-            }
-        }
-        catch { /* Never stop a process that this window did not start. */ }
-        finally { server.Dispose(); }
+        try { StopServerForMaintenance(); }
+        catch { /* Closing never stops an unrelated process. */ }
     }
 }

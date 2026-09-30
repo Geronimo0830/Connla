@@ -427,6 +427,18 @@
     "back-to-top": "回到頂端"
   },
   "setting": {
+    "local-backup": {
+      "label": "Backup and restore",
+      "backup-title": "Back up the whole knowledge base",
+      "backup-description": "Choose a destination. Connla briefly stops its local service and verifies the backup.",
+      "backup-action": "Create backup",
+      "backing-up": "Backing up…",
+      "restore-title": "Restore from backup",
+      "restore-description": "Choose a backup folder. Connla keeps a copy of current data and asks for confirmation first.",
+      "restore-action": "Choose backup",
+      "restoring": "Restoring…",
+      "failed": "The operation failed. Please try again."
+    },
     "access-token": {
       "access-token-copied-to-clipboard": "存取令牌已複製到剪貼簿",
       "access-token-deleted": "存取令牌 `{{description}}` 已刪除",

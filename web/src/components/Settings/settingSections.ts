@@ -4,6 +4,7 @@ import {
   BarChart3Icon,
   CogIcon,
   DatabaseIcon,
+  HardDriveDownloadIcon,
   HeartHandshakeIcon,
   KeyIcon,
   KeyRoundIcon,
@@ -20,6 +21,7 @@ import { type ComponentType } from "react";
 import AccessTokenSection from "@/components/Settings/AccessTokenSection";
 import AISection from "@/components/Settings/AISection";
 import InstanceSection from "@/components/Settings/InstanceSection";
+import LocalBackupSection from "@/components/Settings/LocalBackupSection";
 import MemberSection from "@/components/Settings/MemberSection";
 import MemoExportSection from "@/components/Settings/MemoExportSection";
 import MemoRelatedSettings from "@/components/Settings/MemoRelatedSettings";
@@ -32,11 +34,13 @@ import SSOSection from "@/components/Settings/SSOSection";
 import StorageSection from "@/components/Settings/StorageSection";
 import TagsSection from "@/components/Settings/TagsSection";
 import WebhookSection from "@/components/Settings/WebhookSection";
+import { isDesktopHost } from "@/lib/desktop-maintenance";
 import { InstanceSetting_Key } from "@/types/proto/api/v1/instance_service_pb";
 
 export type SettingSectionKey =
   | "my-account"
   | "memo-export"
+  | "local-backup"
   | "spaces"
   | "access-token"
   | "preference"
@@ -60,6 +64,7 @@ export interface SettingSectionDefinition {
   icon: LucideIcon;
   component: ComponentType;
   preloadSettingKeys?: InstanceSetting_Key[];
+  desktopOnly?: boolean;
 }
 
 export const SETTINGS_SECTIONS: SettingSectionDefinition[] = [
@@ -134,6 +139,14 @@ export const SETTINGS_SECTIONS: SettingSectionDefinition[] = [
     component: MemoExportSection,
   },
   {
+    key: "local-backup",
+    scope: "admin",
+    labelKey: "setting.local-backup.label",
+    icon: HardDriveDownloadIcon,
+    component: LocalBackupSection,
+    desktopOnly: true,
+  },
+  {
     key: "storage",
     scope: "admin",
     labelKey: "setting.storage.label",
@@ -174,6 +187,9 @@ export const SETTINGS_SECTIONS: SettingSectionDefinition[] = [
 ];
 
 export const DEFAULT_SETTING_SECTION: SettingSectionKey = "my-account";
+
+export const getVisibleSettingSections = (isHost: boolean): SettingSectionDefinition[] =>
+  SETTINGS_SECTIONS.filter((section) => (section.scope === "basic" || isHost) && (!section.desktopOnly || isDesktopHost()));
 
 export const isSettingSectionKey = (value: string): value is SettingSectionKey => {
   return SETTINGS_SECTIONS.some((section) => section.key === value);

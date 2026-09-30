@@ -52,7 +52,7 @@ Connla 取自爱尔兰传说中的 *Connla's Well*。在《Sinann II》中，九
 
 ## 下载与运行
 
-Windows 用户可以从 [Releases](https://github.com/Geronimo0830/Connla/releases) 下载桌面版压缩包，完整解压后双击 `Connla.exe`。软件会在独立窗口中打开，不需要安装开发工具或打开浏览器；若缺少 WebView2 Runtime，请按提示从微软官网安装。个人数据与程序分开保存，升级前请先备份。详见 [桌面版使用说明](docs/LOCAL_DESKTOP.md)。
+Windows 用户可以从 [Releases](https://github.com/Geronimo0830/Connla/releases) 下载桌面版压缩包，完整解压后双击 `Connla.exe`。软件会在独立窗口中打开，不需要安装开发工具或打开浏览器；若缺少 WebView2 Runtime，请按提示从微软官网安装。个人数据与程序分开保存；v0.1.1 起，可在「设置 → 备份与恢复」中创建或恢复整库备份。详见 [桌面版使用说明](docs/LOCAL_DESKTOP.md)。
 
 ### 从源码运行
 

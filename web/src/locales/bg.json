@@ -387,6 +387,18 @@
     "back-to-top": "Обратно към началото"
   },
   "setting": {
+    "local-backup": {
+      "label": "Backup and restore",
+      "backup-title": "Back up the whole knowledge base",
+      "backup-description": "Choose a destination. Connla briefly stops its local service and verifies the backup.",
+      "backup-action": "Create backup",
+      "backing-up": "Backing up…",
+      "restore-title": "Restore from backup",
+      "restore-description": "Choose a backup folder. Connla keeps a copy of current data and asks for confirmation first.",
+      "restore-action": "Choose backup",
+      "restoring": "Restoring…",
+      "failed": "The operation failed. Please try again."
+    },
     "access-token": {
       "access-token-copied-to-clipboard": "Означението за достъп е копирано в клипборда",
       "access-token-deleted": "Токенът за достъп `{{description}}` е изтрит",

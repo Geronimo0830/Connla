@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   DEFAULT_SETTING_SECTION,
+  getVisibleSettingSections,
   isSettingSectionKey,
   SETTINGS_SECTIONS,
   type SettingSectionKey,
@@ -18,7 +19,7 @@ const Setting = () => {
   const isHost = user?.role === User_Role.ADMIN;
 
   const sectionGroups = useMemo(() => {
-    const visibleSections = SETTINGS_SECTIONS.filter((section) => section.scope === "basic" || isHost);
+    const visibleSections = getVisibleSettingSections(isHost);
     return {
       admin: visibleSections.filter((section) => section.scope === "admin"),
       all: visibleSections,

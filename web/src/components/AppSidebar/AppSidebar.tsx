@@ -28,7 +28,7 @@ import { Link, matchPath, useLocation, useNavigate } from "react-router-dom";
 import { KnowledgeSidebarContent } from "@/components/KnowledgeNavigation";
 import { MAP_MEMO_FILTER } from "@/components/MapView/useMapMemos";
 import { MemoDetailSidebar } from "@/components/MemoDetailSidebar";
-import { DEFAULT_SETTING_SECTION, SETTINGS_SECTIONS } from "@/components/Settings/settingSections";
+import { DEFAULT_SETTING_SECTION, getVisibleSettingSections, SETTINGS_SECTIONS } from "@/components/Settings/settingSections";
 import StatisticsView from "@/components/StatisticsView";
 import UserMenu from "@/components/UserMenu";
 import { Button } from "@/components/ui/button";
@@ -238,8 +238,9 @@ const SettingsSidebarContent = () => {
   const { setMobileOpen } = useAppSidebar();
   const isHost = user?.role === User_Role.ADMIN;
   const currentSection = location.hash.slice(1) || DEFAULT_SETTING_SECTION;
-  const basic = SETTINGS_SECTIONS.filter((section) => section.scope === "basic");
-  const admin = SETTINGS_SECTIONS.filter((section) => section.scope === "admin");
+  const visibleSections = getVisibleSettingSections(isHost);
+  const basic = visibleSections.filter((section) => section.scope === "basic");
+  const admin = visibleSections.filter((section) => section.scope === "admin");
   const renderSections = (sections: typeof SETTINGS_SECTIONS) =>
     sections.map((section) => (
       <Link

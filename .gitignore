@@ -2,6 +2,8 @@
 /build/
 /desktop/bin/
 /desktop/obj/
+/desktop/tests/bin/
+/desktop/tests/obj/
 /bin/
 /tmp/
 /memos

@@ -1,5 +1,7 @@
 # Backup and restore
 
+Windows desktop users can use **Settings → Backup and restore** instead of the commands below. The desktop app briefly stops its owned local server, verifies each backup, and keeps a safety copy of current data before switching to restored data. The commands below remain available for source-based or advanced installations.
+
 This procedure is for a local SQLite instance. Stop Connla before creating the backup. The database snapshot uses SQLite `VACUUM INTO`; stopping the server keeps external attachment files consistent with database references.
 
 From the project directory, with the server stopped:
