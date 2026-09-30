@@ -8,16 +8,6 @@
 
 它以本地使用为主。随手记录、文档收件箱、全文搜索、主题和知识卡片彼此衔接，却不要求你一开始就分类、套模板或接入 AI。先用起来，结构可以随着理解慢慢长出来。
 
-## 真实界面
-
-从知识库总览进入文档收件箱，再把原文依据和自己的理解整理成知识卡片。以下均为实际运行画面，左下角的账号已遮盖。
-
-![Connla 知识库总览](docs/screenshots/knowledge-overview.png)
-
-![Connla 文档收件箱](docs/screenshots/document-inbox.png)
-
-![Connla 知识卡片编辑](docs/screenshots/knowledge-card.png)
-
 ## 名字的由来
 
 > *Tipra Chonnlai, ba mór muirn,*<br>
@@ -49,6 +39,16 @@ Connla 取自爱尔兰传说中的 *Connla's Well*。在《Sinann II》中，九
 - **数据留在自己手里**：面向单机 SQLite 使用，提供本地备份与恢复；Windows 本地版仅监听 `127.0.0.1:8081`。
 
 当前边界也很明确：旧版 `.doc` / `.xls` 可保存原件，但不解析正文；扫描版 PDF 暂无 OCR。AI 自动生成和复习功能不在当前版本范围内。
+
+## 真实界面
+
+从知识库总览进入文档收件箱，再把原文依据和自己的理解整理成知识卡片。以下均为实际运行画面，左下角的账号已遮盖。
+
+![Connla 知识库总览](docs/screenshots/knowledge-overview.png)
+
+![Connla 文档收件箱](docs/screenshots/document-inbox.png)
+
+![Connla 知识卡片](docs/screenshots/knowledge-card.png)
 
 ## 下载与运行
 
